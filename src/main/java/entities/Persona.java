@@ -23,7 +23,7 @@ public class Persona {
     private LocalDate data_nascita;
     @Column(name = "sesso")
     private SessoType sesso;
-
+// molte persone possono partecipare alla gara
     @ManyToMany(mappedBy = "lista_atleti")
     private List<GaraAtletica> lista_atleti;
 

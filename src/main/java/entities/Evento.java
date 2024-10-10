@@ -6,9 +6,11 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.util.UUID;
 
-@Entity//qui vogliamo che la classe sia mappata ad una specifica tabella nel db
+@Entity//qui vogliamo che la classe sia mappata
+// ad una specifica tabella nel db
 @Table(name = "evento")
-@Inheritance(strategy = InheritanceType.JOINED)
+@Inheritance(strategy = InheritanceType.JOINED)// significa che il padre condivide con i figli
+// le sue info
 
 public class Evento {
     @Id
@@ -21,11 +23,11 @@ public class Evento {
     @Column(name = "descrizione")
     protected String descrizione;
     @Column(name = "tipo_evento")
-    @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.STRING)  //indica a JPA come memorizzare questo enum nel database.
     protected EventType tipoEvento;
     @Column(name = "numero_max_partecipanti")
     protected long numeroMassimoPartecipanti;
-
+// molti eventi ad una sola location
     @ManyToOne
     @JoinColumn(name = "location_id", nullable = false)
     protected Location location;

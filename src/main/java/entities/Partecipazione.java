@@ -17,7 +17,7 @@ public class Partecipazione {
     @ManyToOne
     private Evento evento;
     @Column(name = "stato")
-    @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.STRING)// indica a JPA come memorizzare questo enum nel database.
     private StatoType stato;
 
     public Partecipazione() {

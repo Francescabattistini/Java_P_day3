@@ -8,11 +8,13 @@ import java.util.List;
 
 @Entity
 public class GaraAtletica extends Evento {
+    // ci possono essere sia molti atleti che molte gare
     @ManyToMany
     @JoinTable(name = "lista_atleti",
-            joinColumns = @JoinColumn(name = "gara_id", nullable = false),
-            inverseJoinColumns = @JoinColumn(name = "persona_id", nullable = false))
-    private List<Persona> lista_atleti;
+     joinColumns = @JoinColumn(name = "gara_id", nullable = false),//memorizziamo un id per la gara
+     inverseJoinColumns = @JoinColumn(name = "persona_id", nullable = false))// memorizziamo un id per la persona
+    private List<Persona> lista_atleti;// creiamo una lista perchè sono più atleti
+
     @ManyToOne
     @JoinColumn(name = "vincitore")
     private Persona vincitore;

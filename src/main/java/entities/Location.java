@@ -15,7 +15,7 @@ public class Location {
     private String nome;
     @Column(name = "città")
     private String città;
-
+ // una location per molti eventi
     @OneToMany(mappedBy = "location")
     private List<Evento> eventi;
 
