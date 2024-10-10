@@ -1,46 +1,55 @@
 package entities;
 
+import enumes.EventType;
+import enumes.GenereType;
+import enumes.InStreamingType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+
 import java.time.LocalDate;
 
-public class Concerto extends Evento{
+@Entity
+public class Concerto extends Evento {
+    @Column(name = "genere_type")
+    @Enumerated(EnumType.STRING)
+    private GenereType genere;
+    @Column(name = "streaming_type")
+    @Enumerated(EnumType.STRING)
+    private InStreamingType in_streaming;
 
-
-
-
-private GeneriMusicali generiMusicali;
-private boolean inStreaming;
-
-
-public Concerto () {}
-
-    public Concerto(String title, LocalDate eventDate, String eventDescription, TipoEvento eventType,
-                    int maxParticipants, Location location, GeneriMusicali generiMusicali, boolean inStreaming) {
-        super(title, eventDate, eventDescription, eventType, maxParticipants, location);
-        this.generiMusicali = generiMusicali;
-        this.inStreaming = inStreaming;
+    public Concerto(String titolo, LocalDate dataEvento, String descrizione, EventType tipoEvento, long numeroMassimoPartecipanti, Location location, GenereType genere, InStreamingType in_streaming) {
+        super(titolo, dataEvento, descrizione, tipoEvento, numeroMassimoPartecipanti, location);
+        this.genere = genere;
+        this.in_streaming = in_streaming;
     }
 
-    public GeneriMusicali getGeneriMusicali() {
-        return generiMusicali;
+    public Concerto() {
+
     }
 
-    public void setGeneriMusicali(GeneriMusicali generiMusicali) {
-        this.generiMusicali = generiMusicali;
+    public GenereType getGenere() {
+        return genere;
     }
 
-    public boolean isInStreaming() {
-        return inStreaming;
+    public void setGenere(GenereType genere) {
+        this.genere = genere;
     }
 
-    public void setInStreaming(boolean inStreaming) {
-        this.inStreaming = inStreaming;
+    public InStreamingType getIn_streaming() {
+        return in_streaming;
+    }
+
+    public void setIn_streaming(InStreamingType in_streaming) {
+        this.in_streaming = in_streaming;
     }
 
     @Override
     public String toString() {
-        return "Concerto{" +
-                "generiMusicali=" + generiMusicali +
-                ", inStreaming=" + inStreaming +
-                '}';
+        return "Concerto{" + super.toString() +
+                ", genere=" + genere +
+                ", in_streaming=" + in_streaming +
+                "} ";
     }
 }

@@ -1,45 +1,116 @@
 package francescaBattistini;
 
-import DAO.EventsDAO;
-import DAO.LocationsDAO;
-import DAO.ParticipationDAO;
-import DAO.PersonDAO;
+
+import DAO.EventDAO;
+import DAO.LocationDAO;
+import DAO.PartecipazioneDAO;
+import DAO.PersonaDAO;
 import entities.*;
+import enumes.EventType;
+import enumes.GenereType;
+import enumes.InStreamingType;
+import enumes.SessoType;
+import exceptions.NotFoundEx;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.UUID;
+import java.util.List;
 
 public class Application {
-    private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("U4W3D4");
+    private static final
+    EntityManagerFactory emf = Persistence.createEntityManagerFactory
+            ("JavaP4");
     public static void main(String[] args) {
         EntityManager em = emf.createEntityManager();
+        EventDAO eventDAO = new EventDAO(em);
+        LocationDAO locationDAO = new LocationDAO(em);
+        PersonaDAO personaDAO = new PersonaDAO(em);
+        PartecipazioneDAO partecipazioneDAO = new PartecipazioneDAO(em);
 
-        EventsDAO ed = new EventsDAO(em);
-        LocationsDAO ld = new LocationsDAO(em);
-        ParticipationDAO pd = new ParticipationDAO(em);
-        PersonDAO ped = new PersonDAO(em);
+        Location location1 = new Location("Salone Conferenze", "Milano");
+        locationDAO.save(location1);
 
-        Location Contea = new Location("Contea", "terra di mezzo ");
-        ld.save(Contea);
-        Location addaToAdd = ld.findById(Contea.getId());
+        Persona persona1 = new Persona("Eddy", "Turpo", "edyan7@hotmail.it", LocalDate.of(1990, 04, 01), SessoType.M);
+        personaDAO.save(persona1);
+        Persona persona2 = new Persona("Arianna", "Loreti", "aryanna@hotmail.it", LocalDate.of(1999, 04, 01), SessoType.F);
+        personaDAO.save(persona2);
+        Persona persona3 = new Persona("Francesca", "Battistini", "frabba@hotmail.it", LocalDate.of(1991, 04, 01), SessoType.F);
+        personaDAO.save(persona3);
 
-       // Evento HobbitStory = new Evento("lo hobbit", LocalDate.of(2025, 2, 16), " riusciranno ad uccidere smaug", TipoEvento.PUBBLICO, 1000, addaToAdd);
-        //ed.save(HobbitStory);
-        ;
+        Concerto concerto1 = new Concerto("Milky Chance", LocalDate.now(), "musica indie", EventType.PUBBLICO, 150, location1, GenereType.POP, InStreamingType.TRUE);
+        eventDAO.save(concerto1);
 
-       /*Person aldo = new Person("Aldo", "Baglio", "aldo.baglio@gmail.com", LocalDate.of(1990, 2, 5),Genere.MASCHIO);
-        ped.save(aldo);*/
 
-        /*Participation aldoParticipation = new Participation(ped.findById(UUID.fromString("b10926f8-3d75-4d8f-a7f5-f95c405ced9d")), ed.getEventById(UUID.fromString("3a9fef30-284a-45d8-9e86-69a9ca9c818e")), ParticipationState.CONFERMATA);
-        pd.save(aldoParticipation);*/
+        List<Concerto> concertiInStreaming = eventDAO.getConcertiInStreaming(InStreamingType.TRUE);
+        System.out.println(concertiInStreaming);
+        List<Concerto> concertiPerGenere = eventDAO.getConcertiPerGenere(GenereType.POP);
+        System.out.println(concertiPerGenere);
+//        if (concerto1.getIn_streaming() == InStreamingType.TRUE) {
+//            System.out.println("Il concerto 'Milky Chance' è in streaming.");
+//        } else {
+//            System.out.println("Il concerto 'Milky Chance' non è in streaming.");
+//        }
 
-        System.out.println(pd.findById(UUID.fromString("4b781815-11e5-4fbc-b05a-bdf8840b3126")).getPerson());
+        try {
+            // Evento laureaDB = eventDAO.findByID(UUID.fromString("6c0882df-551e-4398-9acd-065df73d5d4f"));
+            // System.out.println(laureaDB);
+        } catch (NotFoundEx e) {
+            System.out.println(e.getMessage());
+        }
 
+        /*try {
+            eventDAO.delete(UUID.fromString("c1926e8d-f537-4050-a9d1-0ffe23fcabc8"));
+        } catch (NotFoundEx e) {
+            System.out.println(e.getMessage());
+        }*/
+
+        PartitaDiCalcio romaLazio = new PartitaDiCalcio("Serie A", LocalDate.now(), "Derby capitolino", EventType.PUBBLICO, 5000, location1, "Roma", "Lazio", 3, 2);
+        // eventDAO.save(romaLazio);
+        PartitaDiCalcio lazioRoma = new PartitaDiCalcio("Serie A", LocalDate.now(), "Derby capitolino", EventType.PUBBLICO, 5000, location1, "Lazio", "Roma", 2, 3);
+        //eventDAO.save(lazioRoma);
+        PartitaDiCalcio romaInter = new PartitaDiCalcio("Roma-Inter", LocalDate.now(), "DAJE ROMA DAJE", EventType.PUBBLICO, 8000, location1, "Roma", "Inter", 1, 1);
+        //eventDAO.save(romaInter);
+
+        List<PartitaDiCalcio> casaVincitore = eventDAO.getPartiteVinteInCasa("Roma");
+        System.out.println("Lista casa vincitore: " + casaVincitore);
+
+        System.out.println("-------------");
+        List<PartitaDiCalcio> ospiteVincitore = eventDAO.getPartiteVinteInTrasferta("Lazio");
+        ospiteVincitore.forEach(System.out::println);
+        System.out.println("-------------");
+        List<PartitaDiCalcio> partitePareggiate = eventDAO.getPartitePareggiate();
+        System.out.println(partitePareggiate);
+        System.out.println("-------------");
+        List<Persona> listaAtleti = new ArrayList<>();
+        listaAtleti.add(persona1);
+        listaAtleti.add(persona2);
+        listaAtleti.add(persona3);
+        GaraAtletica olimpiadi = new GaraAtletica("Olimpiadi", LocalDate.now(), "si volaaa", EventType.PUBBLICO, 50, location1, listaAtleti, persona1);
+        eventDAO.save(olimpiadi);
+        GaraAtletica olimpiadi2 = new GaraAtletica("Olimpiadi2", LocalDate.now(), "si volaaa", EventType.PUBBLICO, 50, location1, listaAtleti, persona1);
+        eventDAO.save(olimpiadi2);
+        System.out.println(olimpiadi);
+        List<GaraAtletica> vincitoriOlimpiadi = eventDAO.getGareDiAtleticaPerVincitore(persona1);
+        vincitoriOlimpiadi.forEach(System.out::println);
+        System.out.println("-------------");
+        List<GaraAtletica> atletiOlimpiadi = eventDAO.getGareDiAtleticaPerPartecipante(persona2);
+        atletiOlimpiadi.forEach(System.out::println);
+        System.out.println("-------------");
+        List<Concerto> eventiSoldOut = eventDAO.getEventiSouldOut(150);
+        eventiSoldOut.forEach(System.out::println);
+        System.out.println("-------------");
+
+        Partecipazione concertoMilky = new Partecipazione(persona3, concerto1, null);
+        partecipazioneDAO.save(concertoMilky);
+        System.out.println("-------------");
+        List<Partecipazione> pDaConfermare = partecipazioneDAO.getPartecipazioniDaConfermarePerEvento(concerto1);
+        System.out.println(pDaConfermare);
+        System.out.println("-------------");
         em.close();
         emf.close();
     }
+
 }

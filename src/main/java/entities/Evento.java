@@ -1,110 +1,105 @@
 package entities;
 
+import enumes.EventType;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.util.UUID;
 
-@Entity
-@Table(name = "Evento")
-public abstract class Evento {
+@Entity//qui vogliamo che la classe sia mappata ad una specifica tabella nel db
+@Table(name = "evento")
+@Inheritance(strategy = InheritanceType.JOINED)
+
+public class Evento {
     @Id
     @GeneratedValue
-    @Column(name = "id", nullable = false)
-    private UUID id;
-
-    @Column(name = "titolo", nullable = false)
-    private String title;
-
-    @Column(name = "data_evento", nullable = false)
-    private LocalDate eventDate;
-
-    @Column(name = "descrizione_evento", nullable = false)
-    private String eventDescription;
-
-    @Column(name = "tipo_evento", nullable = false)
+    protected UUID id;
+    @Column(name = "titolo")
+    protected String titolo;
+    @Column(name = "data_evento")
+    protected LocalDate dataEvento;
+    @Column(name = "descrizione")
+    protected String descrizione;
+    @Column(name = "tipo_evento")
     @Enumerated(EnumType.STRING)
-    private TipoEvento eventType;
+    protected EventType tipoEvento;
+    @Column(name = "numero_max_partecipanti")
+    protected long numeroMassimoPartecipanti;
 
-    @Column(name = "max_partecipanti", nullable = false)
-    private int maxParticipants;
     @ManyToOne
-    @JoinColumn(name = "location_id")
-    private Location location;
+    @JoinColumn(name = "location_id", nullable = false)
+    protected Location location;
 
     public Evento() {
     }
 
-    public Evento(String title, LocalDate eventDate, String eventDescription, TipoEvento eventType, int maxParticipants, Location location) {
-        this.title = title;
-        this.eventDate = eventDate;
-        this.eventDescription = eventDescription;
-        this.eventType = eventType;
-        this.maxParticipants = maxParticipants;
+    public Evento(String titolo, LocalDate dataEvento, String descrizione, EventType tipoEvento, long numeroMassimoPartecipanti, Location location) {
+        this.titolo = titolo;
+        this.dataEvento = dataEvento;
+        this.descrizione = descrizione;
+        this.tipoEvento = tipoEvento;
+        this.numeroMassimoPartecipanti = numeroMassimoPartecipanti;
         this.location = location;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
     }
 
     public UUID getId() {
         return id;
     }
 
+    public String getTitolo() {
+        return titolo;
+    }
+
+    public void setTitolo(String titolo) {
+        this.titolo = titolo;
+    }
+
+    public LocalDate getDataEvento() {
+        return dataEvento;
+    }
+
+    public void setDataEvento(LocalDate dataEvento) {
+        this.dataEvento = dataEvento;
+    }
+
+    public String getDescrizione() {
+        return descrizione;
+    }
+
+    public void setDescrizione(String descrizione) {
+        this.descrizione = descrizione;
+    }
+
+    public EventType getTipoEvento() {
+        return tipoEvento;
+    }
+
+    public void setTipoEvento(EventType tipoEvento) {
+        this.tipoEvento = tipoEvento;
+    }
+
+    public long getNumeroMassimoPartecipanti() {
+        return numeroMassimoPartecipanti;
+    }
+
+    public void setNumeroMassimoPartecipanti(long numeroMassimoPartecipanti) {
+        this.numeroMassimoPartecipanti = numeroMassimoPartecipanti;
+    }
+
     public Location getLocation() {
         return location;
     }
 
-    public void setLocation(Location location) {
-        this.location = location;
-    }
-
-    public LocalDate getEventDate() {
-        return eventDate;
-    }
-
-    public void setEventDate(LocalDate eventDate) {
-        this.eventDate = eventDate;
-    }
-
-    public String getEventDescription() {
-        return eventDescription;
-    }
-
-    public void setEventDescription(String eventDescription) {
-        this.eventDescription = eventDescription;
-    }
-
-    public TipoEvento getEventType() {
-        return eventType;
-    }
-
-    public void setEventType(TipoEvento tipoEvento) {
-        this.eventType = tipoEvento;
-    }
-
-    public int getMaxParticipants() {
-        return maxParticipants;
-    }
-
-    public void setMaxParticipants(int maxParticipants) {
-        this.maxParticipants = maxParticipants;
-    }
-
     @Override
     public String toString() {
-        return "Event{" +
+        return "Evento{" +
                 "id=" + id +
-                ", title='" + title + '\'' +
-                ", eventDate=" + eventDate +
-                ", eventDescription='" + eventDescription + '\'' +
-                ", eventType=" + eventType +
-                ", maxParticipants=" + maxParticipants +
+                ", titolo='" + titolo + '\'' +
+                ", dataEvento=" + dataEvento +
+                ", descrizione='" + descrizione + '\'' +
+                ", tipoEvento=" + tipoEvento +
+                ", numeroMassimoPartecipanti=" + numeroMassimoPartecipanti +
+                ", location=" + location +
                 '}';
     }
 }

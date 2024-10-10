@@ -1,103 +1,96 @@
 package entities;
 
-import jakarta.persistence.*;
+import enumes.EventType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
 
 import java.time.LocalDate;
+@Entity
+public class PartitaDiCalcio extends Evento {
+    @Column(name = "squadra_di_casa")
+    private String squadra_di_casa;
+    @Column(name = "squadra_ospite")
+    private String squadra_ospite;
+    @Column(name = "squadra_vincente", nullable = true)
+    private String squadra_vincente;
+    @Column(name = "numero_gol_casa")
+    private int numero_gol_squadra_casa;
+    @Column(name = "numero_gol_ospite")
+    private int numero_gol_ospite;
 
- @Entity
- @Table(name = "partita_calcio")
- @DiscriminatorValue("Calcio")
-//PER CAPIRE SE UNA PARTITA DI CALCIO E' STATA VINTA A CASA O IN TRASFERTA.
- @NamedQuery(name = "getPartiteVinteInCasa",
-         query = "SELECT p FROM PartitaCalcio p WHERE p.golSquadraCasa > p.golSquadraOspite")
- //eleziona tutte le partite di calcio (PartitaCalcio) in cui i gol segnati dalla squadra di casa
- // (golSquadraCasa) sono superiori ai gol segnati dalla squadra ospite (golSquadraOspite).
-
-
- @NamedQuery(name = "getPartiteVinteInTrasferta",
-         query = "SELECT p FROM PartitaCalcio p WHERE p.golSquadraOspite > p.golSquadraCasa")
- //Query: seleziona tutte le partite di calcio (PartitaCalcio)
- //in cui i gol segnati dalla squadra ospite (golSquadraOspite)
- // sono superiori ai gol segnati dalla squadra di casa
-
-public class PartitaDiCalcio extends Evento{
-     @Column(name = "squadra_casa",nullable = false)
-    private String squadraDiCasa;
-     @Column(name = "squadra_ospite", nullable = false)
-    private String squadraOspite;
-     @Column(name ="squadra_vincente")
-    private String squadraVincente;//[null se pareggio]
-     @Column(name = "gol_squadra_casa",nullable = false)
-    private int golSquadraDiCasa;
-     @Column(name = "gol_squadra_ospite",nullable = false)
-     private int golSquadraOspite;
-
-
-    public PartitaDiCalcio(){
+    public PartitaDiCalcio() {
 
     }
 
-
-
-
-    public PartitaDiCalcio(String title, LocalDate eventDate, String eventDescription, TipoEvento eventType, int maxParticipants, Location location,
-                           String squadraDiCasa, String squadraOspite, String squadraVincente, int golSquadraDiCasa, int golSquadraOspite) {
-        super(title, eventDate, eventDescription, eventType, maxParticipants, location);
-        this.squadraDiCasa = squadraDiCasa;
-        this.squadraOspite = squadraOspite;
-        this.squadraVincente = squadraVincente;
-        this.golSquadraDiCasa = golSquadraDiCasa;
-        this.golSquadraOspite = golSquadraOspite;
+    public PartitaDiCalcio(String titolo, LocalDate dataEvento, String descrizione, EventType tipoEvento, long numeroMassimoPartecipanti, Location location, String squadra_di_casa, String squadra_ospite, int numero_gol_squadra_casa, int numero_gol_ospite) {
+        super(titolo, dataEvento, descrizione, tipoEvento, numeroMassimoPartecipanti, location);
+        this.squadra_di_casa = squadra_di_casa;
+        this.squadra_ospite = squadra_ospite;
+        this.numero_gol_squadra_casa = numero_gol_squadra_casa;
+        this.numero_gol_ospite = numero_gol_ospite;
+        this.squadra_vincente = calcolaSquadraVincente();
     }
 
-    public String getSquadraDiCasa() {
-        return squadraDiCasa;
+
+    public String calcolaSquadraVincente() {
+        if (numero_gol_ospite > numero_gol_squadra_casa) {
+            return this.squadra_vincente = squadra_ospite;
+        } else if (numero_gol_ospite < numero_gol_squadra_casa) {
+            return this.squadra_vincente = squadra_di_casa;
+        } else {
+            return this.squadra_vincente;
+        }
     }
 
-    public void setSquadraDiCasa(String squadraDiCasa) {
-        this.squadraDiCasa = squadraDiCasa;
+
+    public String getSquadra_di_casa() {
+        return squadra_di_casa;
     }
 
-    public String getSquadraOspite() {
-        return squadraOspite;
+    public void setSquadra_di_casa(String squadra_di_casa) {
+        this.squadra_di_casa = squadra_di_casa;
     }
 
-    public void setSquadraOspite(String squadraOspite) {
-        this.squadraOspite = squadraOspite;
+    public String getSquadra_ospite() {
+        return squadra_ospite;
     }
 
-    public String getSquadraVincente() {
-        return squadraVincente;
+    public void setSquadra_ospite(String squadra_ospite) {
+        this.squadra_ospite = squadra_ospite;
     }
 
-    public void setSquadraVincente(String squadraVincente) {
-        this.squadraVincente = squadraVincente;
+    public String getSquadra_vincente() {
+        return squadra_vincente;
     }
 
-    public int getGolSquadraDiCasa() {
-        return golSquadraDiCasa;
+    public void setSquadra_vincente(String squadra_vincente) {
+        this.squadra_vincente = squadra_vincente;
     }
 
-    public void setGolSquadraDiCasa(int golSquadraDiCasa) {
-        this.golSquadraDiCasa = golSquadraDiCasa;
+    public int getNumero_gol_squadra_casa() {
+        return numero_gol_squadra_casa;
     }
 
-    public int getGolSquadraOspite() {
-        return golSquadraOspite;
+    public void setNumero_gol_squadra_casa(int numero_gol_squadra_casa) {
+        this.numero_gol_squadra_casa = numero_gol_squadra_casa;
     }
 
-    public void setGolSquadraOspite(int golSquadraOspite) {
-        this.golSquadraOspite = golSquadraOspite;
+    public int getNumero_gol_ospite() {
+        return numero_gol_ospite;
+    }
+
+    public void setNumero_gol_ospite(int numero_gol_ospite) {
+        this.numero_gol_ospite = numero_gol_ospite;
     }
 
     @Override
     public String toString() {
-        return "PartitaDiCalcio{" +
-                "squadraDiCasa='" + squadraDiCasa + '\'' +
-                ", squadraOspite='" + squadraOspite + '\'' +
-                ", squadraVincente='" + squadraVincente + '\'' +
-                ", golSquadraDiCasa=" + golSquadraDiCasa +
-                ", golSquadraOspite=" + golSquadraOspite +
-                '}'+ super.toString();
+        return "PartitaDiCalcio{" + super.toString() +
+                "squadra_di_casa='" + squadra_di_casa + '\'' +
+                ", squadra_ospite='" + squadra_ospite + '\'' +
+                ", squadra_vincente='" + squadra_vincente + '\'' +
+                ", numero_gol_squadra_casa=" + numero_gol_squadra_casa +
+                ", numero_gol_ospite=" + numero_gol_ospite +
+                "}";
     }
 }
