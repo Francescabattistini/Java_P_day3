@@ -101,7 +101,7 @@ public class Application {
         //------------------------------------------- lISTA ATLETI------------------------------------------------------
         System.out.println("lista atleti");
         List<Persona> listaAtleti = new ArrayList<>();
-        listaAtleti.add(persona1);// popolamento della lista persona 
+        listaAtleti.add(persona1);// popolamento della lista persona
         listaAtleti.add(persona2);
         listaAtleti.add(persona3);
         GaraAtletica olimpiadi = new GaraAtletica("Olimpiadi", LocalDate.now(), "si volaaa", EventType.PUBBLICO, 50, location1, listaAtleti, persona1);
