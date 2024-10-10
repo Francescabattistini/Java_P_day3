@@ -1,14 +1,25 @@
 package entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.DiscriminatorValue;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
 import java.time.LocalDate;
 
  @Entity
  @Table(name = "partita_calcio")
  @DiscriminatorValue("Calcio")
+//PER CAPIRE SE UNA PARTITA DI CALCIO E' STATA VINTA A CASA O IN TRASFERTA.
+ @NamedQuery(name = "getPartiteVinteInCasa",
+         query = "SELECT p FROM PartitaCalcio p WHERE p.golSquadraCasa > p.golSquadraOspite")
+ //eleziona tutte le partite di calcio (PartitaCalcio) in cui i gol segnati dalla squadra di casa
+ // (golSquadraCasa) sono superiori ai gol segnati dalla squadra ospite (golSquadraOspite).
+
+
+ @NamedQuery(name = "getPartiteVinteInTrasferta",
+         query = "SELECT p FROM PartitaCalcio p WHERE p.golSquadraOspite > p.golSquadraCasa")
+ //Query: seleziona tutte le partite di calcio (PartitaCalcio)
+ //in cui i gol segnati dalla squadra ospite (golSquadraOspite)
+ // sono superiori ai gol segnati dalla squadra di casa
+
 public class PartitaDiCalcio extends Evento{
      @Column(name = "squadra_casa",nullable = false)
     private String squadraDiCasa;
@@ -87,6 +98,6 @@ public class PartitaDiCalcio extends Evento{
                 ", squadraVincente='" + squadraVincente + '\'' +
                 ", golSquadraDiCasa=" + golSquadraDiCasa +
                 ", golSquadraOspite=" + golSquadraOspite +
-                '}';
+                '}'+ super.toString();
     }
 }
