@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 public class Application {
-    private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("u4w3d3");
+    private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("U4W3D4");
     public static void main(String[] args) {
         EntityManager em = emf.createEntityManager();
 

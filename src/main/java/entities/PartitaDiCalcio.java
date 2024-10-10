@@ -1,13 +1,25 @@
 package entities;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 import java.time.LocalDate;
 
+ @Entity
+ @Table(name = "partita_calcio")
+ @DiscriminatorValue("Calcio")
 public class PartitaDiCalcio extends Evento{
+     @Column(name = "squadra_casa",nullable = false)
     private String squadraDiCasa;
+     @Column(name = "squadra_ospite", nullable = false)
     private String squadraOspite;
+     @Column(name ="squadra_vincente")
     private String squadraVincente;//[null se pareggio]
+     @Column(name = "gol_squadra_casa",nullable = false)
     private int golSquadraDiCasa;
-    private int golSquadraOspite;
+     @Column(name = "gol_squadra_ospite",nullable = false)
+     private int golSquadraOspite;
 
 
     public PartitaDiCalcio(){

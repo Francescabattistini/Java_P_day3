@@ -33,6 +33,10 @@ public class Person {
     @OneToMany(mappedBy = "person")
     private List<Participation> participations = new ArrayList<>();
 
+    @OneToMany(mappedBy = "vincitore")
+    private List <GaraDiAtletica> gareAteleticaVinte= new ArrayList<>();
+            @ManyToMany(mappedBy = "atleti")
+            private List <GaraDiAtletica> gare = new ArrayList<>();
     public Person() {
 
     }
